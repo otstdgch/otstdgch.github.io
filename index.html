@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多彩动态背景示例</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #1e90ff, #00bfff, #87cefa, #4682b4, #5dade2, #00ced1);
+            background-size: 600% 600%;
+            animation: gradientBG 20s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff; /* 默认字体颜色，会在JavaScript中动态更改 */
+            font-family: 'Exo 2', sans-serif; /* 现代科技感字体 */
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .main-text, .sub-text, .list-title {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin: 10px 0;
+        }
+
+        .main-text {
+            font-size: 3em;
+        }
+
+        .sub-text {
+            font-size: 1.5em;
+        }
+
+        .lists-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .list-card {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            width: 300px;
+            backdrop-filter: blur(5px); /* 添加模糊效果以增强科技感 */
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        /* 预定义的颜色列表 */
+        .color-options {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-text">总资产：600元</div>
+    <div class="sub-text">虚拟货币资产：250元</div>
+    <div class="sub-text">债券资产：350元</div>
+
+    <div class="lists-container">
+        <div class="list-card">
+            <div class="list-title">虚拟货币资产</div>
+            <ul>
+                <li>2025年3月30日 盈利0美元/亏损0.97美元</li>
+                <li>2025年3月31日 盈利4.11美元/亏损0美元</li>
+                <li>2025年3月30日 盈利0美元/亏损1.00美元</li>
+                <li>2025年3月26日 盈利0.317美元/亏损0美元</li>
+                <li>2025年3月22日 盈利0美元/亏损1.41美元</li>
+                <li>2025年3月9日 盈利2.14美元/亏损0美元</li>
+                <li>2025年3月9日 盈利1.48美元/亏损0美元</li>
+                <li>2025年3月8日 盈利0.49美元/亏损0美元</li>
+            </ul>
+        </div>
+        <div class="list-card">
+            <div class="list-title">债券资产</div>
+            <ul>
+                <li>2025年3月17日 买入018603 50元（净值：1.1417 份额：43.79）</li>
+                <li>2025年3月10日 买入018603 50元（净值：1.1419 份额：43.78）</li>
+                <li>2025年3月03日 买入018603 50元（净值：1.1396 份额：43.88）</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 预定义的颜色列表（更深的颜色）
+        const colors = [
+            "#FF4500", "#FFD700", "#ADFF2F", "#00CED1", "#000080",
+            "#8A2BE2", "#FF1493", "#00FA9A", "#FF6347", "#FF8C00",
+            "#B22222", "#006400", "#00008B", "#483D8B", "#FF8C00",
+            "#FF69B4", "#DB7093", "#8B008B", "#FF1493", "#800000",
+            "#000080", "#000080", "#4B0082"
+        ];
+
+        // 随机选择一个颜色作为字体颜色
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.style.color = randomColor;
+
+        // 为阴影添加颜色
+        const texts = document.querySelectorAll('.main-text, .sub-text, .list-title');
+        texts.forEach(text => {
+            text.style.textShadow = `2px 2px 4px ${randomColor === "#ffffff" ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.7)"}`;
+        });
+    </script>
+</body>
+</html>
