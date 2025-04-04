@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>欢迎博铭</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400&display=swap');
 
         body {
             margin: 0;
@@ -81,9 +81,9 @@
     </style>
 </head>
 <body>
-    <div class="main-text">总资产：600元</div>
-    <div class="sub-text">虚拟货币资产：250元</div>
-    <div class="sub-text">债券资产：350元</div>
+    <div class="main-text" id="total_money">总资产：加载中...</div>
+    <div class="sub-text" id="money_ETH_text">虚拟货币资产：加载中...</div>
+    <div class="sub-text" id="money_ZQ_text">债券资产：加载中...</div>
 
     <div class="lists-container">
         <div class="list-card">
@@ -102,6 +102,7 @@
         <div class="list-card">
             <div class="list-title">债券资产</div>
             <ul>
+                <li>2025年3月31日 买入018603 50元（净值：1.1386 份额：43.91）</li>
                 <li>2025年3月17日 买入018603 50元（净值：1.1417 份额：43.79）</li>
                 <li>2025年3月10日 买入018603 50元（净值：1.1419 份额：43.78）</li>
                 <li>2025年3月03日 买入018603 50元（净值：1.1396 份额：43.88）</li>
@@ -110,24 +111,83 @@
     </div>
 
     <script>
-        // 预定义的颜色列表（更深的颜色）
-        const colors = [
-            "#FF4500", "#FFD700", "#ADFF2F", "#00CED1", "#000080",
-            "#8A2BE2", "#FF1493", "#00FA9A", "#FF6347", "#FF8C00",
-            "#B22222", "#006400", "#00008B", "#483D8B", "#FF8C00",
-            "#FF69B4", "#DB7093", "#8B008B", "#FF1493", "#800000",
-            "#000080", "#000080", "#4B0082"
-        ];
+        // 定义虚拟货币资产和债券资产的变量（美元）
+        let money_ETH = 30.2; // 虚拟货币资产(美元)
+        var jingzhi = 1.1449;
+        // 份额
+        var fene1 = 43.88;
+        var fene2 = 43.78;
+        var fene3 = 43.79;
+        var fene4 = 43.91;
+        // 手续费总数
+        var shouxufei = 4;
 
-        // 随机选择一个颜色作为字体颜色
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-        document.body.style.color = randomColor;
+        var other=400-shouxufei*50;
+        
+        // 计算债券资产，并保留两位小数
+        const money_ZQ = (jingzhi * (fene1 + fene2 + fene3 + fene4) - shouxufei * 0.5 + other).toFixed(2); // 债券资产
 
-        // 为阴影添加颜色
-        const texts = document.querySelectorAll('.main-text, .sub-text, .list-title');
-        texts.forEach(text => {
-            text.style.textShadow = `2px 2px 4px ${randomColor === "#ffffff" ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.7)"}`;
-        });
+        // 使用 fetch 获取汇率数据
+        const requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        const apiUrl = "https://v2.xxapi.cn/api/allrates"; // 替换为实际的 API URL
+
+        fetch(apiUrl, requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应不是OK');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.data && data.data.rates && data.data.rates.USD && data.data.rates.CNY) {
+                    const usdRate = data.data.rates.USD.rate;
+                    const cnyRate = data.data.rates.CNY.rate;
+
+                    // 计算美元兑人民币的汇率
+                    const USDCNY = (cnyRate / usdRate).toFixed(2);
+
+                    // 更新虚拟货币资产（美元 -> 人民币），并保留两位小数
+                    money_ETH = (money_ETH * USDCNY).toFixed(2);
+
+                    // 计算总资产，并保留两位小数
+                    const total_money = (parseFloat(money_ETH) + parseFloat(money_ZQ)).toFixed(2);
+
+                    // 更新文本
+                    document.getElementById('total_money').textContent = `总资产：${total_money}元`;
+                    document.getElementById('money_ETH_text').textContent = `虚拟货币资产：${money_ETH}元`;
+                    document.getElementById('money_ZQ_text').textContent = `债券资产：${money_ZQ}元`;
+
+                    // 随机选择一个颜色作为字体颜色
+                    const colors = [
+                        "#FF4500", "#FFD700", "#ADFF2F", "#00CED1", "#000080",
+                        "#8A2BE2", "#FF1493", "#00FA9A", "#FF6347", "#FF8C00",
+                        "#B22222", "#006400", "#00008B", "#483D8B", "#FF8C00",
+                        "#FF69B4", "#DB7093", "#8B008B", "#FF1493", "#800000",
+                        "#000080", "#000080", "#4B0082"
+                    ];
+
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    document.body.style.color = randomColor;
+
+                    // 为阴影添加颜色
+                    const texts = document.querySelectorAll('.main-text, .sub-text, .list-title');
+                    texts.forEach(text => {
+                        text.style.textShadow = `2px 2px 4px ${randomColor === "#ffffff" ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.7)"}`;
+                    });
+                } else {
+                    throw new Error('无法找到美元或人民币的汇率数据');
+                }
+            })
+            .catch(error => {
+                console.error('发生错误:', error);
+                document.getElementById('total_money').textContent = '总资产：加载中...';
+                document.getElementById('money_ETH_text').textContent = '虚拟货币资产：加载中...';
+                document.getElementById('money_ZQ_text').textContent = '债券资产：加载中...';
+            });
     </script>
 </body>
 </html>
