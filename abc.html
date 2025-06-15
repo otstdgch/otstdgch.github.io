@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC界面</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            /* 自定义科幻背景 */
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            position: relative;
+            /* 星星动画 */
+            overflow: hidden;
+        }
+        /* 星星样式 */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            animation: moveStars 100s linear infinite;
+        }
+        .stars::before, .stars::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 
+                1000px 2000px white,
+                2000px 1500px white,
+                1500px 2500px white,
+                2500px 3000px white,
+                3000px 1000px white,
+                3500px 2500px white,
+                4000px 1500px white,
+                4500px 3500px white;
+            opacity: 0.3;
+            animation: twinkle 5s infinite alternate;
+        }
+        .stars::after {
+            animation-delay: 2.5s;
+        }
+        @keyframes moveStars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-1000px); }
+        }
+        @keyframes twinkle {
+            from { opacity: 0.3; }
+            to { opacity: 0.7; }
+        }
+        .container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .text-container {
+            font-size: 1em; /* 调整字体大小 */
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInText 4s forwards;
+        }
+        @keyframes fadeInText {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .photos-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .photos-container img {
+            width: 100px;
+            height: 100px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        /* 照片淡入效果 */
+        .photos-container img.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="text-container" id="typed-text">
+    </div>
+    <div class="photos-container">
+        <img src="res1.png" alt="照片1" class="photo">
+        <img src="res2.png" alt="照片2" class="photo">
+        <img src="res3.png" alt="照片3" class="photo">
+    </div>
+</div>
+
+<script>
+    // 打字效果
+    function typeWriter(text, element, delay) {
+        let index = 0;
+        function type() {
+            if (index < text.length) {
+                element.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(type, delay);
+            }
+        }
+        type();
+    }
+
+    const textElement = document.getElementById('typed-text');
+    const text = `亲爱的爸爸，父亲节快乐！在这个特别的日子里，我想借此机会向您表达我最深的感激和爱意。您一直是我生命中的灯塔，用您的智慧、力量和无私的爱指引着我前行。
+
+        从小到大，您是家里的顶梁柱，从打工人到当上饭店老板。您的性格平稳，没有像郑代英那样易怒，而是冷静思考，但您对家的奉献是不可否认的。
+
+        我们家并不富裕，所以我想过赚钱，试过玩游戏赚钱，试过刷视频赚钱，但久经磨难之后，我最终还是认定了交易的职业。它考验的是我的技术和心态，我以前的那些说法，其实都是有一些错误。交易这个东西必须要有成绩出来，风险才会降到最低。所以它并不能让人暴富，而是像是一场考试一样。但暑假也希望能够拥有一些资金进行交易，在一切都顺利的情况下，那么交易一般来说也不会太难。在管理好仓位的情况下，哪怕10块钱100块钱都能做交易，所以说一千两千的话也其实不用的。
+
+        没错，交易其实就是根据风险来赚钱，但是它的门槛很低，是离赚钱最近的地方，也是离亏钱最近的地方。在暑假，我肯定会尽量做到一个好的交易系统，但你们不用担心沉迷其中，因为它完全就不是一种会让人上瘾的东西。上瘾的东西是在亏损时出现的，但我现在已经不处在那个阶段了，已经完美地度过了。现在你给我50块钱，我也能通过一个月把它做到70块钱到100块。
+
+        但这一切都还没有证据支持，所以要靠暑假来验证。所以你们不用担心我的交易，完全可以把它看作和玩魔方一样，玩电脑一样，玩游戏一样。
+
+        交易说完了，接下来是教育问题。我理解我之前小时候可能并不懂事，但每个人不可能一出生就懂事的，你们也没有说过很好的教育，所以这也不怪你们。希望最好的结果就是不会再发生这样的事情了。
+
+        老爸，您那宽厚的肩膀，曾为我撑起一片天；您那温暖的笑容，总能化解我心中的忧愁。老爸，您是我心中永远的英雄。感谢您给予我生命，感谢您教会我如何面对生活的挑战。无论我走到哪里，您的教诲和爱都将是我前行的动力。愿您在彼岸一切安安好，愿我们的心永远相连。
+
+        最后，老爸，今天要开开心心的，父亲节快乐^ω^！`; // 你的文本内容
+    typeWriter(text, textElement, 50); // 每50毫秒打一个字
+
+    // 照片淡入效果
+    const photos = document.querySelectorAll('.photo');
+    let photoIndex = 0;
+    const intervalTime = 3000; // 每3秒显示一张照片
+
+    function showNextPhoto() {
+        if (photoIndex < photos.length) {
+            photos[photoIndex].classList.add('visible');
+            photoIndex++;
+            setTimeout(showNextPhoto, intervalTime);
+        }
+    }
+
+    // 初始延迟3秒后开始显示照片
+    setTimeout(showNextPhoto, intervalTime);
+</script>
+
+</body>
+</html>
